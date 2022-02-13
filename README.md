@@ -4,4 +4,4 @@ The file **ssh-env-git** contains env for git for loading the correct ssh key fo
 
 The catalog **sonix** should be copied to **/srv/ixpmanager/resources/skins**
 
-The original files can be found in the IXP-Manager source located in /srv/ixpmanager/resources/views. These files can be copied and modified to our pleasing.
+The original files can be found in the IXP-Manager source located in **/srv/ixpmanager/resources/views**. These files can be copied and modified to our pleasing.
