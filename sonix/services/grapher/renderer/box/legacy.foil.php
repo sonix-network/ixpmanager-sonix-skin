@@ -51,6 +51,19 @@ src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?org
 <iframe src="https://metric.sonix.network/grafana/d-solo/OYlR2m47z/overview?orgId=1&theme=light&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
 <?php
 
+} else if ($gfp != "" && $t->graph->classType() == "Infrastructure") {
+	if ($t->graph->infrastructure()->id === 1) {
+                ?> 
+		<iframe src="https://metric.sonix.network/grafana/d-solo/OYlR2m47z/overview?orgId=1&theme=light&var-ixp=ixp-(kn7%7Ckg%7Cixn)-.*&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
+                <?php
+        }
+	else if ($t->graph->infrastructure()->id === 2) {
+                ?>
+		<iframe src="https://metric.sonix.network/grafana/d-solo/OYlR2m47z/overview?orgId=1&theme=light&var-ixp=ixp-(shg5)-.*&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
+                <?php
+        }
+
+
 // Smokeping or sFlow graphs
 } else if ($t->graph->classType() === "Smokeping" || $t->graph->classType() == "VlanInterface") { ?>
 
