@@ -1,0 +1,2 @@
+# Run "source" on this file to load the specific key for this repo
+export GIT_SSH_COMMAND='ssh -i /root/.ssh/id_ecdsa_github_sonixskin -o IdentitiesOnly=yes'
