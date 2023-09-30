@@ -48,28 +48,27 @@ src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?org
 
 } else if ($gfp != "" && $t->graph->classType() == "IXP") {
 ?>
-<iframe src="https://metric.sonix.network/grafana/d-solo/OYlR2m47z/overview?orgId=1&theme=light&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
+<iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
 <?php
 
 } else if ($gfp != "" && $t->graph->classType() == "Infrastructure") {
 	if ($t->graph->infrastructure()->id === 1) {
                 ?> 
-		<iframe src="https://metric.sonix.network/grafana/d-solo/OYlR2m47z/overview?orgId=1&theme=light&var-ixp=ixp-(kn7%7Ckg%7Cixn)-.*&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
+		<iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&var-ixp=ixp-(kn7%7Ckg%7Cixn)-.*&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
                 <?php
         }
 	else if ($t->graph->infrastructure()->id === 2) {
                 ?>
-		<iframe src="https://metric.sonix.network/grafana/d-solo/OYlR2m47z/overview?orgId=1&theme=light&var-ixp=ixp-(shg5)-.*&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
+		<iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&var-ixp=ixp-(shg5)-.*&from=now-<?=$gfp?>&to=now&panelId=5" width="100%" height="400" frameborder="0"></iframe>
                 <?php
         }
 
-
-// Smokeping or sFlow graphs
-} else if ($t->graph->classType() === "Smokeping" || $t->graph->classType() == "VlanInterface") { ?>
-
-    <img width="100%" border="0" src="data:image/png;base64,<?=base64_encode( $t->graph->png() )?>" />
-
-<?php
+} else if ($gfp != "" && $t->graph->classType() == "VlanInterface") {
+$sasn = $t->graph->customer()->autsys;
+$dasn = 'All'
+?>
+		<iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?=$categoryMap[$t->graph->category()]?>&var-source_asn=<?=$sasn?>&var-destination_asn=<?=$dasn?>&from=now-<?=$gfp?>&to=now" width="100%" height="400" frameborder="0"></iframe>
+<?php       
 } else {
 	echo 'This graph is not implemented';
 }
