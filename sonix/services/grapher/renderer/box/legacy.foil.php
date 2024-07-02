@@ -31,6 +31,9 @@ switch($t->graph->period()) {
 if ($gfp != "" && $t->graph->classType() == "Customer") {
 foreach ($t->graph->customer()->virtualInterfaces as $vi) {
 	$swp = $vi->switchPort();
+	if($swp === false) {
+		continue;
+	}
 ?>
 <iframe
 src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?orgId=1&theme=light&var-switch=<?=$swp->switcher->name?>.sonix.network&var-interface=<?=$swp->name?>&from=now-<?=$gfp?>&to=now&panelId=<?=$categoryMap[$t->graph->category()]?>"
