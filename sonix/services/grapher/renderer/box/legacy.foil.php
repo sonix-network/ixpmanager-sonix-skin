@@ -8,6 +8,10 @@ $categoryMap['errs'] = 3;
 $categoryMap['discs'] = 6;
 $categoryMap['bcasts'] = 4;
 
+$categoryMapSflow = array();
+$categoryMapSflow['bits'] = 2;
+$categoryMapSflow['pkts'] = 3;
+
 // Grafana period
 $gfp = "24h";
 switch($t->graph->period()) {
@@ -70,7 +74,7 @@ src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?org
 $sasn = $t->graph->customer()->autsys;
 $dasn = 'All'
 ?>
-		<iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?=$categoryMap[$t->graph->category()]?>&var-source_asn=<?=$sasn?>&var-destination_asn=<?=$dasn?>&from=now-<?=$gfp?>&to=now" width="100%" height="400" frameborder="0"></iframe>
+		<iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?=$categoryMapSflow[$t->graph->category()]?>&var-source_asn=<?=$sasn?>&var-destination_asn=<?=$dasn?>&from=now-<?=$gfp?>&to=now" width="100%" height="400" frameborder="0"></iframe>
 <?php       
 } else {
 	echo 'This graph is not implemented';

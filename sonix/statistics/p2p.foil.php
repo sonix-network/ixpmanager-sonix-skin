@@ -204,7 +204,7 @@ switch($t->graph->period()) {
 
 $categoryMap = array();
 $categoryMap['bits'] = 2;
-$categoryMap['pkts'] = 5;
+$categoryMap['pkts'] = 3;
 
 $sasn = $t->graph->svli()->virtualInterface->customer->autsys;
 $dasn = $dvli->virtualInterface->customer->autsys;
