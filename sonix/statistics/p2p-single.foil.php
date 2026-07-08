@@ -11,35 +11,29 @@
 <?php $this->section( 'page-header-preamble' ) ?>
     <?php if( Auth::check() && $isSuperUser ): ?>
         <a href="<?= route( 'customer@overview', [ 'cust' => $t->c->id ] ) ?>" >
-            <?= $t->c->getFormattedName() ?>
+            <?= $t->ee( $t->c->getFormattedName() ) ?>
         </a>
         /
         <a href="<?= route( 'statistics@member', [ 'cust' => $t->c->id ] ) ?>" >
             Statistics
         </a>
         /
-        <a href="<?= route( 'statistics@p2p', [ 'cust' => $t->c->id ] ) ?>" >
+        <a href="<?= route( 'statistics@p2p-table', [ 'custid' => $t->c->id ] ) ?>" >
             Peer to Peer Graphs
         </a>
         /
         Traffic Exchanged with
-            <a href="<?= route( 'statistics@p2p', [ 'cust' => $dstVli->virtualInterface->customer->id ] )
-                . '?svli='     . $dstVli->id
-                . '&dvli='     . $srcVli->id
-                . '&category=' . $t->category
-                . '&period='   . $t->period
-                . '&protocol=' . $t->protocol
-            ?>">
-                <?= $dstVli->virtualInterface->customer->getFormattedName() ?>
+            <a href="<?= route( 'statistics@p2p-get', [ 'srcVli' => $dstVli->id, 'dstVli' => $srcVli->id, 'category' => $t->category, 'period' => $t->period, 'protocol' => $t->protocol ] ) ?>">
+                <?= $t->ee( $dstVli->virtualInterface->customer->getFormattedName() ) ?>
         </a>
     <?php else: ?>
-        Peer to Peer Graphs :: <?= $t->c->getFormattedName() ?>
+        Peer to Peer Graphs :: <?= $t->ee( $t->c->getFormattedName() ) ?>
     <?php endif; ?>
 <?php $this->append() ?>
 
 <?php if( Auth::check() && !$isSuperUser ): ?>
     <?php $this->section( 'page-header-postamble' ) ?>
-        <a class="btn btn-white btn-sm" href="<?= route( 'statistics@p2p', [ 'cust' => $t->c->id ] ) ?>">P2P Overview</a>
+        <a class="btn btn-white btn-sm" href="<?= route( 'statistics@p2ps-get', [ 'customer' => $t->c->id ] ) ?>">P2P Overview</a>
     <?php $this->append() ?>
 <?php endif; ?>
 
@@ -48,8 +42,8 @@
         <div class="col-md-12">
             <?= $t->alerts() ?>
             <h3>
-                Traffic exchanged between <?= $srcVli->virtualInterface->customer->abbreviatedName ?> (<?= $srcVli->getIPAddress( $t->protocol )->address ?? 'No IP' ?>)
-                &amp; <?= $dstVli->virtualInterface->customer->abbreviatedName ?> (<?= $dstVli->getIPAddress( $t->protocol )->address ?? 'No IP' ?>)
+                Traffic exchanged between <?= $t->ee( $srcVli->virtualInterface->customer->abbreviatedName ) ?> (<?= $t->ee( $srcVli->getIPAddress( $t->protocol )->address ?? 'No IP' ) ?>)
+                &amp; <?= $t->ee( $dstVli->virtualInterface->customer->abbreviatedName ) ?> (<?= $t->ee( $dstVli->getIPAddress( $t->protocol )->address ?? 'No IP' ) ?>)
             </h3>
         </div>
     </div>
@@ -61,16 +55,16 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <form class="navbar-form navbar-left form-inline d-block d-lg-flex" action="<?= route( 'statistics@p2p', [ 'cust' => $this->c->id ] ) ?>" method="post">
+                    <form class="navbar-form navbar-left form-inline d-block d-lg-flex" action="<?= route( 'statistics@p2p-post' ) ?>" method="post">
+                        <ul class="navbar-nav">
                             <li class="nav-item">
-                                <div class="nav-link d-flex ">
+                                <div class="nav-link d-flex">
                                     <label for="select_network" class="col-sm-4 col-lg-3">Interface:</label>
                                     <select id="select_network" name="svli" class="form-control">
                                         <?php foreach( $t->srcVlis as $id => $vli ): ?>
                                             <option value="<?= $id ?>" <?php if( $t->srcVli->id === $vli->id ): ?> selected <?php endif; ?>  >
-                                                <?= $vli->vlan->name ?>
-                                                    :: <?= $vli->getIPAddress( $t->protocol )->address ?? 'No IP - VLI ID: ' . $vli->id ?>
+                                                <?= $t->ee( $vli->vlan->name ) ?>
+                                                    :: <?= $t->ee( $vli->getIPAddress( $t->protocol )->address ?? 'No IP - VLI ID: ' . $vli->id ) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -78,7 +72,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <div class="nav-link d-flex ">
+                                <div class="nav-link d-flex">
                                     <label for="select_category" class="col-sm-4 col-lg-6">Category:</label>
                                     <select id="select_category" name="category" class="form-control">
                                         <?php foreach( IXP\Services\Grapher\Graph::CATEGORIES_BITS_PKTS_DESCS as $cvalue => $cname ): ?>
@@ -91,30 +85,34 @@
                             </li>
 
                             <li class="nav-item">
-                                <div class="nav-link d-flex ">
+                                <div class="nav-link d-flex">
                                     <label for="select_protocol" class="col-sm-4 col-lg-6">Protocol:</label>
                                     <select id="select_protocol" name="protocol" class="form-control">
-                                        <?php foreach( IXP\Services\Grapher\Graph::PROTOCOL_REAL_DESCS as $pvalue => $pname ): ?>
-                                            <?php if( $srcVli->ipvxEnabled( $pvalue ) ): ?>
-                                                <option value="<?= $pvalue ?>" <?php if( $t->protocol === $pvalue ): ?> selected <?php endif; ?>  >
-                                                    <?= $pname ?>
-                                                </option>
-                                            <?php endif; ?>
+                                        <?php foreach( $t->possibleProtocols as $pvalue => $pname ): ?>
+                                            <option value="<?= $pvalue ?>" <?php if( $t->protocol === $pvalue ): ?> selected <?php endif; ?>  >
+                                                <?= $pname ?>
+                                            </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                             </li>
-
                             <input type="hidden" name="dvli" value="<?= $dstVli->id ?>">
                             <input type="hidden" name="_token" value="<?= csrf_token() ?>">
                             <input class="btn btn-white float-right" type="submit" name="submit" value="Submit" />
-                        </form>
-                    </ul>
+                        </ul>
+                    </form>
                 </div>
             </nav>
         </div>
     </div>
 
+    <?php
+        // SONIX skin: render P2P graphs as Grafana sflow panels
+        $categoryMapSflow = [ 'bits' => 2, 'pkts' => 3 ];
+        $periodMapGrafana = [ 'day' => '24h', 'week' => '7d', 'month' => '30d', 'year' => '1y' ];
+        $sasn = $t->srcVli->virtualInterface->customer->autsys;
+        $dasn = $dstVli->virtualInterface->customer->autsys;
+    ?>
     <div class="row">
         <?php foreach( IXP\Services\Grapher\Graph::PERIOD_DESCS as $pid => $pname ): ?>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 mt-4">
@@ -124,37 +122,8 @@
                     </div>
                     <div class="card-body">
                         <p>
-                            <?php
-                                $t->graph->setDestinationVlanInterface( $dstVli, false )->setType( 'png' )->setPeriod( $pid );
-                                $t->graph->authorise();
-?>
-<?php
-// Grafana period
-$gfp = "24h";
-switch($t->graph->period()) {
-	case "day":
-		$gfp = "24h";
-		break;
-	case "week":
-		$gfp = "7d";
-		break;
-	case "month":
-		$gfp = "30d";
-		break;
-	case "year":
-		$gfp = "1y";
-		break;
-}
-
-$categoryMap = array();
-$categoryMap['bits'] = 2;
-$categoryMap['pkts'] = 3;
-
-$sasn = $t->graph->svli()->virtualInterface->customer->autsys;
-$dasn = $t->graph->dvli()->virtualInterface->customer->autsys;
-?>
-		<iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?=$categoryMap[$t->graph->category()]?>&var-source_asn=<?=$sasn?>&var-destination_asn=<?=$dasn?>&from=now-<?=$gfp?>&to=now" width="100%" height="400" frameborder="0"></iframe>
- 
+                            <iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?= $categoryMapSflow[ $t->category ] ?? 2 ?>&var-source_asn=<?= $sasn ?>&var-destination_asn=<?= $dasn ?>&from=now-<?= $periodMapGrafana[ $pid ] ?? '24h' ?>&to=now"
+                                width="100%" height="400" frameborder="0"></iframe>
                         </p>
                     </div>
                 </div>

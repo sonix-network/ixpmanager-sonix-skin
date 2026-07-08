@@ -157,11 +157,10 @@
                                 </tr>
                             <?php endif; ?>
                         </table>
-			<div class="card-body">
-<iframe src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?orgId=1&theme=light&var-switch=<?=$pi->switchport->switcher->name?>.sonix.network&var-interface=<?=$pi->switchport->name?>&from=now-24h&to=now&panelId=8"
-  width="100%" height="200" frameborder="0"></iframe>
-                	</div>
-
+                        <div class="card-body">
+                            <iframe src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?orgId=1&theme=light&var-switch=<?= $pi->switchPort->switcher->name ?>.sonix.network&var-interface=<?= $pi->switchPort->name ?>&from=now-24h&to=now&panelId=8"
+                                width="100%" height="200" frameborder="0"></iframe>
+                        </div>
                     </div>
                 </div>
                 <?php $countPi++ ?>
@@ -347,6 +346,31 @@
     </div>
 
     <div class="col-lg-6 col-md-12">
+
+    <?php foreach( $pis as $pi ): ?>
+
+            <?php if( !$pi->isGraphable() ) { continue; } ?>
+
+            <div class="card mb-4">
+                <div class="card-header d-flex">
+                    <div class="mr-auto">
+                        <h5>
+                            Day Graph for <?= $t->ee( $pi->switchPort->switcher->name ) ?> / <?= $t->ee( $pi->switchPort->name ) ?>
+                        </h5>
+                    </div>
+
+                    <div class="my-auto">
+                        <a class="btn btn-white btn-sm" href="<?= route( "statistics@member-drilldown", [ 'type' => 'pi', 'typeid' => $pi->id ] ) ?>">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <?= $t->grapher->physint( $pi )->renderer()->boxLegacy() ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
         <?php if( $isLAG ): ?>
             <?php if( $t->vi->isGraphable() ): ?>
                 <div class="card mb-4">
@@ -369,27 +393,5 @@
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php foreach( $pis as $pi ): ?>
-            <?php if( !$pi->isGraphable() ) { continue; } ?>
-
-            <div class="card mb-4">
-                <div class="card-header d-flex">
-                    <div class="mr-auto">
-                        <h5>
-                            Day Graph for <?= $t->ee( $pi->switchPort->switcher->name ) ?> / <?= $t->ee( $pi->switchPort->name ) ?>
-                        </h5>
-                    </div>
-
-                    <div class="my-auto">
-                        <a class="btn btn-white btn-sm" href="<?= route( "statistics@member-drilldown", [ 'type' => 'pi', 'typeid' => $pi->id ] ) ?>">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <?= $t->grapher->physint( $pi )->renderer()->boxLegacy() ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
     </div>
 </div>
