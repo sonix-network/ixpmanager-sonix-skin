@@ -117,13 +117,14 @@
                     <?php endif; ?>
                 </div>
             </li>
+
         </ul>
 
         <form id="div-header-select-customer" class="form-inline my-2 my-lg-0">
             <select id="menu-select-customer" type="select" name="id" class="chzn-select col-xl-7 col-lg-6">
                 <option></option>
                 <?php foreach( $t->dd_customer_id_name as $k => $i ): ?>
-                    <option value="<?= $k ?>"><?= $i[ 'name' ] ?></option>
+                    <option value="<?= $k ?>"><?= $t->ee( $i[ 'name' ] ) ?></option>
                 <?php endforeach; ?>
             </select>
         </form>
@@ -146,6 +147,14 @@
                         Active Sessions
                     </a>
 
+                    <?php if( !config( 'ixp_fe.frontend.disabled.app-passwords' ) ): ?>
+                        <div class="dropdown-divider"></div>
+    
+                        <a class="dropdown-item <?= !request()->is( '*app-password*' ) ?: 'active' ?>" href="<?= route('app-password@list' )?>">
+                            App Passwords
+                        </a>
+                    <?php endif; ?>
+                    
                     <div class="dropdown-divider"></div>
 
                     <a class="dropdown-item <?= !request()->is( 'customer-note/unread-notes' ) ?: 'active' ?>" href="<?= route( 'customerNotes@unreadNotes' ) ?>">Unread Notes</a>
@@ -165,7 +174,7 @@
                                <?= Auth::getUser()->custid !== $cust->id ?: "onclick='return false;'" ?>
                                href="<?= Auth::getUser()->custid === $cust->id ? '#' : route( 'switch-customer@switch' , [ "cust" => $cust->id ] ) ?>"
                             >
-                                <?= $cust->name ?>
+                                <?= $t->ee( $cust->name ) ?>
                             </a>
                         <?php endforeach; ?>
                     <?php endif; ?>
