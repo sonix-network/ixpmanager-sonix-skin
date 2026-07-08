@@ -44,13 +44,12 @@ if( $t->graph->classType() === "Customer" ):
         width="100%" height="400" frameborder="0"></iframe>
 
 <?php elseif( $t->graph->classType() === "Infrastructure" ): ?>
-    <?php if( $t->graph->infrastructure()->id === 1 ): ?>
-        <iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&var-ixp=ixp-(kn7%7Ckg%7Cixn)-.*&from=now-<?= $gfp ?>&to=now&panelId=5"
-            width="100%" height="400" frameborder="0"></iframe>
-    <?php elseif( $t->graph->infrastructure()->id === 2 ): ?>
-        <iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&var-ixp=ixp-(shg5)-.*&from=now-<?= $gfp ?>&to=now&panelId=5"
-            width="100%" height="400" frameborder="0"></iframe>
-    <?php endif; ?>
+    <?php
+        // Filter the overview panel to this infrastructure's switches
+        $ixpFilter = urlencode( '(' . $t->graph->infrastructure()->switchers->pluck( 'name' )->implode( '|' ) . ')' );
+    ?>
+    <iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&var-ixp=<?= $ixpFilter ?>&from=now-<?= $gfp ?>&to=now&panelId=5"
+        width="100%" height="400" frameborder="0"></iframe>
 
 <?php elseif( $t->graph->classType() === "VlanInterface" ): ?>
     <iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?= $categoryMapSflow[ $t->graph->category() ] ?>&var-source_asn=<?= $t->graph->customer()->autsys ?>&var-destination_asn=All&from=now-<?= $gfp ?>&to=now"
