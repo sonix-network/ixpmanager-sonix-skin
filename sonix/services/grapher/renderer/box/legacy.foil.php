@@ -45,8 +45,13 @@ if( $t->graph->classType() === "Customer" ):
 
 <?php elseif( $t->graph->classType() === "Infrastructure" ): ?>
     <?php
-        // Filter the overview panel to this infrastructure's switches
-        $ixpFilter = urlencode( '(' . $t->graph->infrastructure()->switchers->pluck( 'name' )->implode( '|' ) . ')' );
+        // Filter the overview panel to this infrastructure's POPs. Switch
+        // names are ixp-<pop>-swN and the Grafana ixp variable expects
+        // patterns shaped like ixp-(pop1|pop2)-.*
+        $ixpPops = $t->graph->infrastructure()->switchers
+            ->map( fn( $sw ) => explode( '-', $sw->name )[1] ?? $sw->name )
+            ->unique()->implode( '|' );
+        $ixpFilter = urlencode( "ixp-({$ixpPops})-.*" );
     ?>
     <iframe src="https://metric.sonix.network/grafana/d-solo/jKdZekQ4z/overview?orgId=1&theme=light&var-ixp=<?= $ixpFilter ?>&from=now-<?= $gfp ?>&to=now&panelId=5"
         width="100%" height="400" frameborder="0"></iframe>
