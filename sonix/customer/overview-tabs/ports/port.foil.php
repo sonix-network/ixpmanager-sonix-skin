@@ -158,7 +158,7 @@
                             <?php endif; ?>
                         </table>
                         <div class="card-body">
-                            <iframe src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?orgId=1&theme=light&var-switch=<?= $pi->switchPort->switcher->name ?>.sonix.network&var-interface=<?= $pi->switchPort->name ?>&from=now-24h&to=now&panelId=8"
+                            <iframe src="https://metric.sonix.network/grafana/d-solo/laG5Khxnk/interface-details?orgId=1&theme=light&hideLogo=true&var-switch=<?= $pi->switchPort->switcher->name ?>.sonix.network&var-interface=<?= $pi->switchPort->name ?>&from=now-24h&to=now&panelId=8"
                                 width="100%" height="200" frameborder="0"></iframe>
                         </div>
                     </div>
