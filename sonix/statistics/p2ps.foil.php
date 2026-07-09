@@ -226,7 +226,7 @@
                             </h4>
                         </div>
                         <div class="card-body">
-                            <iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&panelId=<?= $categoryMapSflow[ $t->category ] ?? 2 ?>&var-source_asn=<?= $sasn ?>&var-destination_asn=<?= $dvli->virtualInterface->customer->autsys ?>&from=now-<?= $gfp ?>&to=now"
+                            <iframe src="https://metric.sonix.network/grafana/d-solo/YYcB1DwVz/sflow?orgId=1&theme=light&hideLogo=true&panelId=<?= $categoryMapSflow[ $t->category ] ?? 2 ?>&var-source_asn=<?= $sasn ?>&var-destination_asn=<?= $dvli->virtualInterface->customer->autsys ?>&from=now-<?= $gfp ?>&to=now"
                                 width="100%" height="400" frameborder="0"></iframe>
                         </div>
                     </div>
