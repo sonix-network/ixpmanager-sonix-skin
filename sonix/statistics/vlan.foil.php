@@ -4,7 +4,7 @@
 ?>
 
 <?php $this->section( 'page-header-preamble' ) ?>
-    VLAN Graphs - <?= $t->vlan->name ?> (<?= IXP\Services\Grapher\Graph::resolveProtocol( $t->protocol ) ?>)
+    VLAN Graphs - <?= $t->ee( $t->vlan->name ) ?> (<?= IXP\Services\Grapher\Graph::resolveProtocol( $t->protocol ) ?>)
 <?php $this->append() ?>
 
 <?php $this->section( 'content' ) ?>
@@ -25,7 +25,7 @@
 <?php $this->append() ?>
 
 <?php $this->section( 'scripts' ) ?>
-    <script>
+    <script type="module">
     	window.location = "<?= route( 'statistics@infrastructure' ) ?>";
     </script>
 <?php $this->append() ?>

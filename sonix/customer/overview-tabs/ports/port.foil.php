@@ -245,7 +245,7 @@
                                             </b>
                                         </td>
                                         <td>
-                                            <span class="tw-font-mono">
+                                            <span class="tw:font-mono">
                                                 <?= $t->ee( $v6->address ) ?><?php if( isset( $t->netInfo[ $vlanid ][ 6 ][ 'masklen' ] ) ) : ?>/<?= $t->netInfo[ $vlanid ][ 6 ][ "masklen" ] ?><?php endif;?>
                                             </span>
                                         </td>
@@ -254,7 +254,7 @@
                                         </td>
                                         <td>
                                             <?php if( $vli->ipv6bgpmd5secret ): ?>
-                                                <span class="tw-font-mono">
+                                                <span class="tw:font-mono">
                                                     <?= $t->ee( $vli->ipv6bgpmd5secret ) ?>
                                                 </span>
                                             <?php else: ?>
@@ -272,7 +272,7 @@
                                             </b>
                                         </td>
                                         <td>
-                                            <span class="tw-font-mono">
+                                            <span class="tw:font-mono">
                                                 <?= $t->ee( $v4->address ) ?><?php if( isset( $t->netInfo[ $vlanid ][ 4 ][ 'masklen' ] ) ) : ?>/<?= $t->netInfo[ $vlanid ][ 4 ][ "masklen" ] ?><?php endif;?>
                                             </span>
                                         </td>
@@ -281,7 +281,7 @@
                                         </td>
                                         <td>
                                             <?php if( $vli->ipv4bgpmd5secret ): ?>
-                                                <span class="tw-font-mono">
+                                                <span class="tw:font-mono">
                                                     <?= $t->ee( $vli->ipv4bgpmd5secret ) ?>
                                                 </span>
                                             <?php else: ?>
@@ -306,7 +306,7 @@
                                     </td>
                                     <td>
                                         <?php foreach( $vli->layer2Addresses as $l2a ): ?>
-                                            <span class="tw-font-mono">
+                                            <span class="tw:font-mono">
                                                 <?= $l2a->macFormatted( ':' ) ?>
                                             </span><br />
                                         <?php endforeach; ?>
